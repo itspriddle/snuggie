@@ -23,7 +23,6 @@ module Snuggie
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
       require_params :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
-      commit(params)
     end
 
     # Refund a transaction
@@ -115,7 +114,7 @@ module Snuggie
       end
     end
 
-    def commit(params = {})
+    def query_string(params = {})
       if missing = missing_params(params)
         raise "Missing parameters: #{missing.join(', ')}"
       end

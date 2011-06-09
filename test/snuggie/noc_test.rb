@@ -41,11 +41,11 @@ context "Snuggie::NOC" do
     assert required.include?(:flux_capacitor)
   end
 
-  test "#commit raises error if required_params aren't set" do
+  test "#query_string raises error if required_params aren't set" do
     assert_raise RuntimeError do
       res = @noc.instance_eval do
         require_params :ca
-        commit
+        query_string
       end
     end
   end
