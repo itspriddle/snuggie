@@ -22,7 +22,7 @@ module Snuggie
     #   * autorenew  - Renew this license automatically before
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
-      required_params :ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
+      require_params :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
       commit(params)
     end
 
