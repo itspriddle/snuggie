@@ -68,18 +68,10 @@ context "Snuggie::NOC" do
   end
 
   test "#buy_license required params" do
-    assert_raise RuntimeError do
-      @noc.buy_license
-    end
+    assert_required_params @noc, :buy_license, :ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
+  end
 
-    required = @noc.instance_eval do
-      begin
-        buy_license
-      rescue RuntimeError
-      end
-      missing_params
-    end
-    expected = [:ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew]
-    assert_same_elements expected, required
+  test "#list_licenses has no required params" do
+    assert_no_required_params @noc, :list_licenses
   end
 end

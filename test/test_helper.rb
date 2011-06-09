@@ -122,3 +122,27 @@ def assert_does_not_contain(collection, x, extra_msg = "")
     assert(!collection.include?(x), msg)
   end
 end
+
+# Asserts that calling obj.method requires *params
+def assert_required_params(obj, meth, *params)
+  required = obj.instance_eval do
+    begin
+      send(meth)
+    rescue RuntimeError
+    end
+    missing_params
+  end
+  expected = params
+  assert_same_elements expected, required
+end
+
+# Asserts that running obj.method doesn't add to @required_params
+def assert_no_required_params(obj, meth)
+  assert_nothing_raised do
+    required = obj.instance_eval do
+      send(meth)
+      missing_params
+    end
+    assert_same_elements [:ca], required
+  end
+end

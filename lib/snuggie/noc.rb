@@ -32,7 +32,9 @@ module Snuggie
     #
     # Params
     #   * actid - The Action ID to clain a refund for
-    # def refund(params = {})
+    # def refund(id)
+    #   require_params :actid
+    #   commit(:actid => id)
     # end
 
     # List licenses
@@ -54,8 +56,8 @@ module Snuggie
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
     #
-    # def licenses(params = {})
-    # end
+    def list_licenses(params = {})
+    end
 
     # Cancel license
     #
