@@ -1,4 +1,4 @@
-script: "rake spec"
+script: "rake test"
 notifications:
   disabled: true
 rvm:
