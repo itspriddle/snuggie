@@ -2,7 +2,7 @@
 
 Snuggie: Wraps the Softaculous API in a warm, loving embrace.
 
-[Build Status]: http://travis-ci.org/site5/snuggie
+[Build Status]: http://travis-ci.org/site5/snuggie.png
 
 ## Installation
 
