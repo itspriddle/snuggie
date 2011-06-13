@@ -39,69 +39,53 @@ context "Snuggie::NOC" do
     assert_equal Hash.new, @noc.class.new.instance_variable_get(:@credentials)
   end
 
-  test "#initialize sets @required_params" do
-    required = @noc.instance_variable_get(:@required_params)
-    assert required.is_a?(Array)
-    assert_equal required.size, 1
-    assert_equal required.first, :ca
-  end
-
-  test "#require_params appends unique values to @require_params" do
-    required = @noc.instance_eval do
-      require_params :plutonium, :flux_capacitor, :ca
-      @required_params
+  test "#require_params returns true if all params are set" do
+    a1 = @noc.instance_eval do
+      require_params({ :fuel => :plutonium, :date => 1955 }, [:fuel, :date])
     end
-    assert_equal required.size, 3
-    assert required.include?(:plutonium)
-    assert required.include?(:flux_capacitor)
+    assert a1
   end
 
   test "#require_one_of returns true if one param is set" do
-    a1 = nil
-    assert_nothing_raised do
-      params = { :fuel => 'plutonium' }
-      a1 = @noc.instance_eval { require_one_of(params, :fusion, :fuel) }
+    a1 = @noc.instance_eval do
+      require_one_of({ :date => 1955, :fuel => :plutonium }, [:fusion, :fuel])
     end
-    assert a1 == true
+    assert a1
   end
 
-  test "#require_one_of raises MissingArgument" do
+  test "#commit requires all :required params" do
     assert_raise(Snuggie::Errors::MissingArgument) do
-      @noc.instance_eval { require_one_of(Hash.new, :fusion, :fuel) }
+      @noc.instance_eval do
+        commit({}, :required => [:fuel])
+      end
     end
-  end
 
-  test "#query_string raises error if required_params aren't set" do
-    assert_raise RuntimeError do
-      res = @noc.instance_eval do
-        require_params :ca
-        query_string
+    assert_nothing_raised do
+      @noc.instance_eval do
+        commit({ :fuel => :plutonium }, :required => [:fuel])
       end
     end
   end
 
-  test "#missing_params returns array of missing parameters" do
-    res = @noc.instance_eval do
-      require_params :ca
-      missing_params
+  test "#commit requires one of :require_one params" do
+    assert_raise(Snuggie::Errors::MissingArgument) do
+      @noc.instance_eval do
+        commit({ :date => 1955 }, :require_one => [:fuel])
+      end
     end
-    assert res.is_a?(Array)
-    assert_equal res.first, :ca
-  end
 
-  test "#missing_params returns nil if required_params are set" do
-    res = @noc.instance_eval do
-      require_params :ca
-      missing_params :ca => 'foo'
+    assert_nothing_raised do
+      @noc.instance_eval do
+        commit({ :fuel => :plutonium, :date => 1955 }, :require_one => [:fuel])
+      end
     end
-    assert_nil res
   end
 
-  test "#buy_license required params" do
-    assert_required_params @noc, :buy_license, :ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
-  end
+  # test "#buy_license required params" do
+  #   assert_required_params @noc, :buy_license, :ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
+  # end
 
-  test "#list_licenses has no required params" do
-    assert_no_required_params @noc, :list_licenses
-  end
+  # test "#list_licenses has no required params" do
+  #   assert_no_required_params @noc, :list_licenses
+  # end
 end

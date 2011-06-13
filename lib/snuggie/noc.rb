@@ -8,8 +8,7 @@ module Snuggie
         :password => Snuggie.config.password
       } if credentials.empty? && Snuggie.config.username && Snuggie.config.password
 
-      @required_params = [:ca]
-      @credentials     = credentials
+      @credentials = credentials
     end
 
     # Buy a license
@@ -25,7 +24,11 @@ module Snuggie
     #   * autorenew  - Renew this license automatically before
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
-      require_params :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
+      # commit(
+      #   :params   => params.merge(:ca => :buy, :purchase => 1),
+      #   :required => [:purchase, :ips, :toadd, :servertype, :autorenew],
+      #   :optional => [:authemail]
+      # )
     end
 
     # Refund a transaction
@@ -113,29 +116,28 @@ module Snuggie
     # end
 
   private
-    def require_params(*args)
-      args.flatten.each do |arg|
-        @required_params << arg unless @required_params.include?(arg)
+    def commit(params, options = {})
+      if options[:required]
+        unless require_params(params, options[:required])
+          raise Errors::MissingArgument
+        end
+      end
+
+      if options[:require_one]
+        unless require_one_of(params, options[:require_one])
+          raise Errors::MissingArgument
+        end
       end
     end
 
-    def query_string(params = {})
-      if missing = missing_params(params)
-        raise "Missing parameters: #{missing.join(', ')}"
-      end
+    def require_params(params, keys)
+      keys.each { |key| return false unless params[key] }
+      true
     end
 
-    def missing_params(params = {})
-      missing = []
-      @required_params.each do |param|
-        missing << param unless params.has_key?(param)
-      end
-      missing.empty? ? nil : missing
-    end
-
-    def require_one_of(params, *keys)
+    def require_one_of(params, keys)
       keys.each { |key| return true if params[key] }
-      raise Errors::MissingArgument
+      false
     end
   end
 end
