@@ -3,8 +3,13 @@ module Snuggie
     API_URL = 'http://www.softaculous.com/noc'
 
     def initialize(credentials = {})
-      @credentials     = credentials
+      credentials = {
+        :username => Snuggie.config.username,
+        :password => Snuggie.config.password
+      } if credentials.empty?
+
       @required_params = [:ca]
+      @credentials     = credentials
     end
 
     # Buy a license

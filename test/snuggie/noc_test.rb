@@ -1,7 +1,7 @@
 require 'test_helper'
 
 context "Snuggie::NOC" do
-  @@credentials = { :username => 'username', :password => 'password' }
+  @@credentials = { :username => 'marty', :password => 'mcSUPERfly' }
 
   setup do
     @noc = Snuggie::NOC.new(@@credentials)
@@ -11,10 +11,23 @@ context "Snuggie::NOC" do
     assert_valid_url @noc.class::API_URL
   end
 
-  test "#initialize sets @params" do
+  test "#initialize sets @credentials" do
     credentials = @noc.instance_variable_get(:@credentials)
     assert credentials.is_a?(Hash)
     @@credentials.each do |key, val|
+      assert_not_nil credentials[key]
+      assert_equal credentials[key], val
+    end
+  end
+
+  test "#initialize uses Config to set @credentials" do
+    Snuggie.configure do |c|
+      c.username = 'doc'
+      c.password = 'clara'
+    end
+    credentials = @noc.class.new.instance_variable_get(:@credentials)
+    assert credentials.is_a?(Hash)
+    ({ :username => 'doc', :password => 'clara' }).each do |key, val|
       assert_not_nil credentials[key]
       assert_equal credentials[key], val
     end
