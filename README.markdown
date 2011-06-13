@@ -1,6 +1,6 @@
 # Snuggie [![Build Status](http://travis-ci.org/site5/snuggie.png)][Build Status]
 
-Snuggie: Wraps the Softaculous API in a warm, loving embrace.
+Snuggie wraps the Softaculous API in a warm, loving embrace.
 
 [Build Status]: http://travis-ci.org/site5/snuggie
 
@@ -10,9 +10,12 @@ Snuggie: Wraps the Softaculous API in a warm, loving embrace.
 
 ## Usage
 
-Create a new `Snuggie::NOC` object:
+Create a new `Snuggie::NOC` object with your credentials:
 
-    noc = Snuggie::NOC.new(params = {})
+    noc = Snuggie::NOC.new(
+      :username => 'marty',
+      :password => 'mcSUPERfly'
+    )
 
 Buy/renew a license
 
@@ -68,9 +71,8 @@ Get Action/Activity logs for a license
 * Make your feature addition or bug fix.
 * Add tests for it. This is important so I don't break it in a future version
   unintentionally.
-* Commit, do not mess with Rakefile, version, or history. (If you want to have
-  your own version, that is fine but bump version in a commit by itself I can
-  ignore when I pull)
+* Commit, do not bump version. (If you want to have your own version, that is
+  fine but bump version in a commit by itself I can ignore when I pull.)
 * Send me a pull request. Bonus points for topic branches.
 
 ## Copyright
