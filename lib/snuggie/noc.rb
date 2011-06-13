@@ -1,3 +1,5 @@
+require 'cgi'
+
 module Snuggie
   class NOC
     API_URL = 'http://www.softaculous.com/noc'
@@ -24,11 +26,10 @@ module Snuggie
     #   * autorenew  - Renew this license automatically before
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
-      # commit(
-      #   :params   => params.merge(:ca => :buy, :purchase => 1),
-      #   :required => [:purchase, :ips, :toadd, :servertype, :autorenew],
-      #   :optional => [:authemail]
-      # )
+      commit(params.merge(:ca => :buy, :purchase => 1), {
+        :require  => [:purchase, :ips, :toadd, :servertype, :autorenew],
+        :optional => [:authemail]
+      })
     end
 
     # Refund a transaction
@@ -39,8 +40,7 @@ module Snuggie
     # Params
     #   * actid - The Action ID to clain a refund for
     # def refund(id)
-    #   require_params :actid
-    #   commit(:actid => id)
+    #   commit({ :ca => :refund, :actid => id }, :require => [:actid])
     # end
 
     # List licenses
@@ -62,8 +62,9 @@ module Snuggie
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
     #
-    def list_licenses(params = {})
-    end
+    # def list_licenses(params = {})
+    #   commit(params, :optional => [:key, :ip, :expiry, :start, :len])
+    # end
 
     # Cancel license
     #
@@ -117,8 +118,8 @@ module Snuggie
 
   private
     def commit(params, options = {})
-      if options[:required]
-        unless require_params(params, options[:required])
+      if options[:require]
+        unless require_params(params, options[:require])
           raise Errors::MissingArgument
         end
       end
@@ -139,5 +140,18 @@ module Snuggie
       keys.each { |key| return true if params[key] }
       false
     end
+
+    def query_string(params)
+      params.map do |key, val|
+        case key.to_sym
+        when :username
+          key = :nocname
+        when :password
+          key = :nocpass
+        end
+        "#{key}=#{CGI.escape(val.to_s)}"
+      end.join('&')
+    end
+
   end
 end

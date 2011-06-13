@@ -53,16 +53,36 @@ context "Snuggie::NOC" do
     assert a1
   end
 
-  test "#commit requires all :required params" do
+  test "#query_string" do
+    params = {
+      :date     => 1955,
+      :fuel     => :plutonium,
+      :username => 'marty',
+      :password => 'mcSUPERfly'
+    }
+
+    query = @noc.instance_eval do
+      query_string(params)
+    end
+
+    assert query.match(/date=1955/)
+    assert query.match(/fuel=plutonium/)
+    assert query.match(/nocname=marty/)
+    assert query.match(/nocpass=mcSUPERfly/)
+    assert_nil query.match(/username/)
+    assert_nil query.match(/password/)
+  end
+
+  test "#commit requires all :require params" do
     assert_raise(Snuggie::Errors::MissingArgument) do
       @noc.instance_eval do
-        commit({}, :required => [:fuel])
+        commit({}, :require => [:fuel])
       end
     end
 
     assert_nothing_raised do
       @noc.instance_eval do
-        commit({ :fuel => :plutonium }, :required => [:fuel])
+        commit({ :fuel => :plutonium }, :require => [:fuel])
       end
     end
   end
@@ -81,11 +101,23 @@ context "Snuggie::NOC" do
     end
   end
 
-  # test "#buy_license required params" do
-  #   assert_required_params @noc, :buy_license, :ca, :purchase, :ips, :toadd, :servertype, :authemail, :autorenew
+  test "#buy_license required params" do
+    keys = [:purchase, :ips, :toadd, :servertype, :authemail, :autorenew]
+    assert_raise(Snuggie::Errors::MissingArgument, "requires args") do
+      @noc.buy_license
+    end
+  end
+
+  # test "#refund" do
+  #   assert_raise(ArgumentError, "required ip") do
+  #     @noc.refund
+  #   end
   # end
 
-  # test "#list_licenses has no required params" do
-  #   assert_no_required_params @noc, :list_licenses
+  # test "#list_licenses" do
+  #   assert_nothing_raised do
+  #     @noc.list_licenses
+  #   end
   # end
+
 end
