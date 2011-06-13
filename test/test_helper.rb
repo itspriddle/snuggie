@@ -2,6 +2,7 @@ require 'rubygems'
 require 'snuggie'
 require 'test/unit'
 require 'fakeweb'
+require 'php_serialize'
 
 begin
   require 'turn'

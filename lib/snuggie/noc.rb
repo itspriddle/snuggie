@@ -1,4 +1,5 @@
 require 'cgi'
+require 'php_serialize'
 
 module Snuggie
   class NOC
