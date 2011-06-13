@@ -56,6 +56,14 @@ context "Snuggie::NOC" do
     assert required.include?(:flux_capacitor)
   end
 
+  test "#require_one_of returns true if one param is set" do
+    params = { :fuel => 'plutonium' }
+    a1 = @noc.instance_eval { require_one_of(params, :fusion, :fuel) }
+    assert a1 == true
+    a2 = @noc.instance_eval { require_one_of(Hash.new, :fusion, :fuel) }
+    assert a2 == false
+  end
+
   test "#query_string raises error if required_params aren't set" do
     assert_raise RuntimeError do
       res = @noc.instance_eval do
