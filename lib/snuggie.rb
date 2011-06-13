@@ -1,5 +1,6 @@
 module Snuggie
   autoload :Version, "snuggie/version"
+  autoload :Errors,  "snuggie/errors"
   autoload :Config,  "snuggie/config"
   autoload :NOC,     "snuggie/noc"
 
