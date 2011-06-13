@@ -6,7 +6,7 @@ module Snuggie
       credentials = {
         :username => Snuggie.config.username,
         :password => Snuggie.config.password
-      } if credentials.empty?
+      } if credentials.empty? && Snuggie.config.username && Snuggie.config.password
 
       @required_params = [:ca]
       @credentials     = credentials

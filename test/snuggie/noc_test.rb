@@ -31,6 +31,12 @@ context "Snuggie::NOC" do
       assert_not_nil credentials[key]
       assert_equal credentials[key], val
     end
+
+    Snuggie.configure do |c|
+      c.username = nil
+      c.password = nil
+    end
+    assert_equal Hash.new, @noc.class.new.instance_variable_get(:@credentials)
   end
 
   test "#initialize sets @required_params" do
