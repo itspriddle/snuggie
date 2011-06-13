@@ -24,6 +24,7 @@ def context(*args, &block)
     def self.teardown(&block) define_method(:teardown, &block) end
   end
   (class << klass; self end).send(:define_method, :name) { name }
+  (class << klass; self end).send(:define_method, :to_s) { name }
   klass.class_eval &block
 end
 
