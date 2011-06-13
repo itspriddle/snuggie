@@ -135,7 +135,7 @@ module Snuggie
 
     def require_one_of(params, *keys)
       keys.each { |key| return true if params[key] }
-      false
+      raise Errors::MissingArgument
     end
   end
 end

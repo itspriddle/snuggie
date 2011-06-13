@@ -57,11 +57,18 @@ context "Snuggie::NOC" do
   end
 
   test "#require_one_of returns true if one param is set" do
-    params = { :fuel => 'plutonium' }
-    a1 = @noc.instance_eval { require_one_of(params, :fusion, :fuel) }
+    a1 = nil
+    assert_nothing_raised do
+      params = { :fuel => 'plutonium' }
+      a1 = @noc.instance_eval { require_one_of(params, :fusion, :fuel) }
+    end
     assert a1 == true
-    a2 = @noc.instance_eval { require_one_of(Hash.new, :fusion, :fuel) }
-    assert a2 == false
+  end
+
+  test "#require_one_of raises MissingArgument" do
+    assert_raise(Snuggie::Errors::MissingArgument) do
+      @noc.instance_eval { require_one_of(Hash.new, :fusion, :fuel) }
+    end
   end
 
   test "#query_string raises error if required_params aren't set" do
