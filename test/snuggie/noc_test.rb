@@ -112,6 +112,25 @@ context "Snuggie::NOC" do
     end
   end
 
+  test "#commit returns a hash if PHP.unserialize works" do
+    p1 = { :date => 1955 }
+    mock_request(mock_query_url(p1), :body => PHP.serialize(:status => :success))
+    res = @noc.instance_eval do
+      commit(p1, :require => [:date])
+    end
+    assert res.has_key? 'status'
+    assert res['status'] == 'success'
+  end
+
+  test "#commit returns HTTP body if PHP.unserialize fails" do
+    p1 = { :date => 1955 }
+    mock_request(mock_query_url(p1), :body => "not a PHP serialized string")
+    res = @noc.instance_eval do
+      commit(p1, :require => [:date])
+    end
+    assert_equal res, 'not a PHP serialized string'
+  end
+
   test "#buy_license required params" do
     keys = [:purchase, :ips, :toadd, :servertype, :authemail, :autorenew]
     assert_raise(Snuggie::Errors::MissingArgument, "requires args") do

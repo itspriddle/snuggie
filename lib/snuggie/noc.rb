@@ -132,7 +132,13 @@ module Snuggie
       end
 
       uri = "#{API_URL}?#{query_string(params)}"
-      raw = fetch(uri)
+      if res = fetch(uri)
+        @response = begin
+                      PHP.unserialize(res.body)
+                    rescue
+                      res.body
+                    end
+      end
     end
 
     def require_params(params, keys)
