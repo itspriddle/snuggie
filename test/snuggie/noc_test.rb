@@ -1,10 +1,10 @@
 require 'test_helper'
 
 context "Snuggie::NOC" do
-  @@credentials = { :username => 'marty', :password => 'mcSUPERfly' }
+  TEST_CREDENTIALS = { :username => 'marty', :password => 'mcSUPERfly' }
 
   setup do
-    @noc = Snuggie::NOC.new(@@credentials)
+    @noc = Snuggie::NOC.new(TEST_CREDENTIALS)
   end
 
   def mock_query_url(params = {})
@@ -18,7 +18,7 @@ context "Snuggie::NOC" do
   test "#initialize sets @credentials" do
     credentials = @noc.instance_variable_get(:@credentials)
     assert credentials.is_a?(Hash)
-    @@credentials.each do |key, val|
+    TEST_CREDENTIALS.each do |key, val|
       assert_not_nil credentials[key]
       assert_equal credentials[key], val
     end
