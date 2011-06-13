@@ -1,11 +1,14 @@
 require 'rubygems'
 require 'snuggie'
 require 'test/unit'
+require 'fakeweb'
 
 begin
   require 'turn'
 rescue LoadError
 end
+
+FakeWeb.allow_net_connect = false
 
 # test/spec/mini 3
 # Based on http://gist.github.com/25455

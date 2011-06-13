@@ -21,6 +21,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'php-serialize', '~> 1.1.0'
   s.add_development_dependency 'rake', '~> 0.8.7'
+  s.add_development_dependency 'fakeweb', '~> 1.3.0'
 
   s.description = <<-DESC
     Snuggie wraps the Softaculous API in a warm, loving embrace.
