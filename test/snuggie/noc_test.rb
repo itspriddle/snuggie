@@ -81,7 +81,7 @@ context "Snuggie::NOC" do
     mock_request(mock_query_url)
     assert_raise(Snuggie::Errors::MissingArgument) do
       @noc.instance_eval do
-        commit({}, :require => [:fuel])
+        commit({}, :require => :fuel)
       end
     end
 
@@ -89,7 +89,7 @@ context "Snuggie::NOC" do
     mock_request(mock_query_url(params))
     assert_nothing_raised do
       @noc.instance_eval do
-        commit(params, :require => [:fuel])
+        commit(params, :require => :fuel)
       end
     end
   end
@@ -99,7 +99,7 @@ context "Snuggie::NOC" do
     mock_request(mock_query_url(p1))
     assert_raise(Snuggie::Errors::MissingArgument) do
       @noc.instance_eval do
-        commit(p1, :require_one => [:fuel])
+        commit(p1, :require_one => :fuel)
       end
     end
 
@@ -107,7 +107,7 @@ context "Snuggie::NOC" do
     mock_request(mock_query_url(p2))
     assert_nothing_raised do
       @noc.instance_eval do
-        commit(p2, :require_one => [:fuel])
+        commit(p2, :require_one => :fuel)
       end
     end
   end
@@ -116,7 +116,7 @@ context "Snuggie::NOC" do
     p1 = { :date => 1955 }
     mock_request(mock_query_url(p1), :body => PHP.serialize(:status => :success))
     res = @noc.instance_eval do
-      commit(p1, :require => [:date])
+      commit(p1, :require => :date)
     end
     assert res.has_key? 'status'
     assert res['status'] == 'success'
@@ -126,7 +126,7 @@ context "Snuggie::NOC" do
     p1 = { :date => 1955 }
     mock_request(mock_query_url(p1), :body => "not a PHP serialized string")
     res = @noc.instance_eval do
-      commit(p1, :require => [:date])
+      commit(p1, :require => :date)
     end
     assert_equal res, 'not a PHP serialized string'
   end

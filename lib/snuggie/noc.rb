@@ -142,12 +142,12 @@ module Snuggie
     end
 
     def require_params(params, keys)
-      keys.each { |key| return false unless params[key] }
+      Array(keys).each { |key| return false unless params[key] }
       true
     end
 
     def require_one_of(params, keys)
-      keys.each { |key| return true if params[key] }
+      Array(keys).each { |key| return true if params[key] }
       false
     end
 
