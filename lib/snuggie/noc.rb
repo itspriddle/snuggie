@@ -27,10 +27,10 @@ module Snuggie
     #   * autorenew  - Renew this license automatically before
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
-      commit(params.merge(:ca => :buy, :purchase => 1), {
-        :require  => [:purchase, :ips, :toadd, :servertype, :autorenew],
-        :optional => [:authemail]
-      })
+      params.merge!(:ca => :buy, :purchase => 1)
+      commit(params,
+        :require  => [:purchase, :ips, :toadd, :servertype, :autorenew]
+      )
     end
 
     # Refund a transaction
