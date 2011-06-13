@@ -27,6 +27,11 @@ def context(*args, &block)
   klass.class_eval &block
 end
 
+
+def mock_request(url, options = {})
+  FakeWeb.register_uri(:get, url, options)
+end
+
 # Asserts that the given object has an instance variable for var
 #
 #   class Foo

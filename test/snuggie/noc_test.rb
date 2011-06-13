@@ -7,6 +7,10 @@ context "Snuggie::NOC" do
     @noc = Snuggie::NOC.new(@@credentials)
   end
 
+  def mock_query_url(params = {})
+    @noc.class::API_URL + '?' + @noc.instance_eval { query_string(params) }
+  end
+
   test "::API_URL has a valid format" do
     assert_valid_url @noc.class::API_URL
   end
@@ -74,29 +78,36 @@ context "Snuggie::NOC" do
   end
 
   test "#commit requires all :require params" do
+    mock_request(mock_query_url)
     assert_raise(Snuggie::Errors::MissingArgument) do
       @noc.instance_eval do
         commit({}, :require => [:fuel])
       end
     end
 
+    params = { :fuel => :plutonium }
+    mock_request(mock_query_url(params))
     assert_nothing_raised do
       @noc.instance_eval do
-        commit({ :fuel => :plutonium }, :require => [:fuel])
+        commit(params, :require => [:fuel])
       end
     end
   end
 
   test "#commit requires one of :require_one params" do
+    p1 = { :date => 1955 }
+    mock_request(mock_query_url(p1))
     assert_raise(Snuggie::Errors::MissingArgument) do
       @noc.instance_eval do
-        commit({ :date => 1955 }, :require_one => [:fuel])
+        commit(p1, :require_one => [:fuel])
       end
     end
 
+    p2 = { :date => 1955, :fuel => :plutonium }
+    mock_request(mock_query_url(p2))
     assert_nothing_raised do
       @noc.instance_eval do
-        commit({ :fuel => :plutonium, :date => 1955 }, :require_one => [:fuel])
+        commit(p2, :require_one => [:fuel])
       end
     end
   end
