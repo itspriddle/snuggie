@@ -2,10 +2,8 @@ module Snuggie
   class NOC
     API_URL = 'http://www.softaculous.com/noc'
 
-    attr_reader :params
-
-    def initialize(params = {})
-      @params          = params
+    def initialize(credentials = {})
+      @credentials     = credentials
       @required_params = [:ca]
     end
 

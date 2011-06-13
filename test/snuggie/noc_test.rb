@@ -7,20 +7,16 @@ context "Snuggie::NOC" do
     @noc = Snuggie::NOC.new(@@credentials)
   end
 
-  test "has attr_reader :params" do
-    assert_attr_reader @noc, :params
-  end
-
   test "::API_URL has a valid format" do
     assert_valid_url @noc.class::API_URL
   end
 
   test "#initialize sets @params" do
-    params = @noc.instance_variable_get(:@params)
-    assert params.is_a?(Hash)
+    credentials = @noc.instance_variable_get(:@credentials)
+    assert credentials.is_a?(Hash)
     @@credentials.each do |key, val|
-      assert_not_nil params[key]
-      assert_equal params[key], val
+      assert_not_nil credentials[key]
+      assert_equal credentials[key], val
     end
   end
 
