@@ -122,8 +122,10 @@ module Snuggie
     #   * key   - The license key
     #   * limit - The number of action logs to return
     #
-    # def license_logs(params = {})
-    # end
+    def license_logs(params = {})
+      params[:ca] = :licenselogs
+      commit(params, :require => :key)
+    end
 
   private
     def commit(params, options = {})

@@ -214,5 +214,39 @@ context "Snuggie::NOC" do
     assert_equal act['amt'], '2.00'
   end
 
+  test "#license_logs" do
+    mock_request(:license_logs)
+    assert_raise(Snuggie::Errors::MissingArgument, "requires key") do
+      @noc.license_logs
+    end
+    res = @noc.license_logs :key => 'XXXXX-XXXXX-XXXXX-XXXXX'
+    assert res.is_a?(Hash)
+    assert res['actions'].is_a?(Array)
+    act = res['actions'].first
+    assert act.is_a?(Hash)
+    assert_equal act['added'], '1M'
+    assert_equal act['nocid'], 'XXXX'
+    assert_equal act['refunded'].to_i, 0
+    assert_equal act['time'].to_i, 1308062889
+    assert_equal act['date'].to_i, 20110614
+    assert_equal act['rate'], '2.00'
+    assert_equal act['action'], 'new'
+    assert_equal act['invoid'].to_i, 0
+    assert_equal act['lid'], 'XXXXX'
+    assert_equal act['amt'], '2.00'
+    lic = res['license']
+    assert lic.is_a?(Hash)
+    assert_equal lic['servertype'].to_i, 1
+    assert_equal lic['nocid'], 'XXXX'
+    assert_equal lic['apiuid'].to_i, 0
+    assert_equal lic['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert_equal lic['expires'].to_i, 20110714
+    assert_equal lic['time'].to_i, 1308062889
+    assert_equal lic['last_sync'].to_i, 0
+    assert_equal lic['type'].to_i, 1
+    assert_equal lic['lid'], 'XXXXX'
+    assert_equal lic['authemail'], 'marty@hilldale.edu'
+    assert_equal lic['active'].to_i, 1
+  end
 
 end
