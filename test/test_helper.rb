@@ -30,6 +30,9 @@ end
 
 
 def mock_request(url, options = {})
+  if fixture = options.delete(:fixture)
+    options[:body] = File.read("test/fixtures/#{fixture}.txt")
+  end
   FakeWeb.register_uri(:get, url, options)
 end
 
