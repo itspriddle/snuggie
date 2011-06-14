@@ -158,11 +158,25 @@ context "Snuggie::NOC" do
     assert_equal res['amt'].to_i, 2
   end
 
-  # test "#refund" do
-  #   assert_raise(ArgumentError, "required ip") do
-  #     @noc.refund
-  #   end
-  # end
+  test "#refund" do
+    mock_request(:refund)
+    assert_raise(Snuggie::Errors::MissingArgument, "requires actid") do
+      @noc.refund
+    end
+
+    res = @noc.refund :actid => 99999
+    assert res.is_a?(Hash)
+    # added-1MerrorlicenseXXXXX-XXXXX-XXXXX-XXXXX-XXXXXtime1308066592bal-50.0actionrefundrate2.00actid0lidXXXXXamt-2.0
+    assert_equal res['added'], '-1M'
+    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert_equal res['time'], 1308066592
+    assert_equal res['bal'], -50.0
+    assert_equal res['action'], 'refund'
+    assert_equal res['rate'], '2.00'
+    assert_equal res['actid'], 0
+    assert_equal res['lid'], 'XXXXX'
+    assert_equal res['amt'], -2.0
+  end
 
   # test "#list_licenses" do
   #   assert_nothing_raised do

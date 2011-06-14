@@ -42,9 +42,10 @@ module Snuggie
     #
     # Params
     #   * actid - The Action ID to clain a refund for
-    # def refund(id)
-    #   commit({ :ca => :refund, :actid => id }, :require => [:actid])
-    # end
+    def refund(params = {})
+      params[:ca] = :refund
+      commit(params, :require => [:actid])
+    end
 
     # List licenses
     #
