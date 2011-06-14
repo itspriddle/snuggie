@@ -1,4 +1,5 @@
 require 'cgi'
+require 'net/http'
 require 'php_serialize'
 
 module Snuggie
