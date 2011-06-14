@@ -79,8 +79,8 @@ module Snuggie
     #
     # Params
     #
-    #   * key - (Optional) The license key
-    #   * ip  - (Optional) The Primary IP of the license
+    #   * lickey - (Optional) The license key
+    #   * licip  - (Optional) The Primary IP of the license
     #
     # def cancel(params = {})
     # end
