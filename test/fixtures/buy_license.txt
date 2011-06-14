@@ -1,0 +1,1 @@
+a:12:{s:3:"lid";i:99999;s:7:"license";s:29:"XXXXX-XXXXX-XXXXX-XXXXX-XXXXX";s:3:"bal";d:-48;s:2:"ip";s:9:"127.0.0.1";s:4:"time";i:1308062889;s:4:"rate";i:2;s:3:"amt";i:2;s:5:"added";s:2:"1M";s:6:"action";s:3:"new";s:9:"autorenew";s:3:"YES";s:5:"actid";i:99999;s:5:"error";N;}
