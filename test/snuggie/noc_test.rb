@@ -186,4 +186,12 @@ context "Snuggie::NOC" do
     assert_not_nil res['licenses']
   end
 
+  test "#cancel" do
+    mock_request(:cancel)
+    assert_raise(Snuggie::Errors::MissingArgument, "requires lickey or licip") do
+      @noc.cancel
+    end
+    # TODO: fixture/test
+  end
+
 end
