@@ -108,8 +108,10 @@ module Snuggie
     # Params
     #   * invoid - The invoice ID to getch details for.
     #
-    # def invoice_details(params = {})
-    # end
+    def invoice_details(params = {})
+      params[:ca] = :invoicedetails
+      commit(params)
+    end
 
     # Get Action Logs for a license
     #

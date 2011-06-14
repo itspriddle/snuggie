@@ -194,4 +194,25 @@ context "Snuggie::NOC" do
     # TODO: fixture/test
   end
 
+  test "#invoice_details unbilled" do
+    mock_request(:invoice_details_unbilled)
+    res = @noc.invoice_details
+    assert res.is_a?(Hash)
+    assert res['actions'].is_a?(Hash)
+    act = res['actions'][0]
+    assert_equal act['added'], '1M'
+    assert_equal act['nocid'], 'XXXX'
+    assert_equal act['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert_equal act['refunded'].to_i, 0
+    assert_equal act['time'], '1308062889'
+    assert_equal act['date'], '20110614'
+    assert_equal act['rate'], '2.00'
+    assert_equal act['action'], 'new'
+    assert_equal act['actid'], 'XXXXX'
+    assert_equal act['invoid'].to_i, 0
+    assert_equal act['lid'], 'XXXXX'
+    assert_equal act['amt'], '2.00'
+  end
+
+
 end
