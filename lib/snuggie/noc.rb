@@ -66,9 +66,10 @@ module Snuggie
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
     #
-    # def list_licenses(params = {})
-    #   commit(params, :optional => [:key, :ip, :expiry, :start, :len])
-    # end
+    def list_licenses(params = {})
+      params[:ca] = :licenses
+      commit(params)
+    end
 
     # Cancel license
     #

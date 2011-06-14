@@ -177,10 +177,13 @@ context "Snuggie::NOC" do
     assert_equal res['amt'], -2.0
   end
 
-  # test "#list_licenses" do
-  #   assert_nothing_raised do
-  #     @noc.list_licenses
-  #   end
-  # end
+  test "#list_licenses" do
+    mock_request(:list_licenses)
+    res = @noc.list_licenses
+    assert res.is_a?(Hash)
+    assert_equal res['num_results'], 1
+    assert_equal res['num_active'], 1
+    assert_not_nil res['licenses']
+  end
 
 end
