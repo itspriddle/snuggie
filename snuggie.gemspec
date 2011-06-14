@@ -10,7 +10,7 @@ Gem::Specification.new do |s|
   s.summary    = 'Snuggie wraps the Softaculous API in a warm, loving embrace'
   s.homepage   = 'https://github.com/site5/snuggie'
   s.authors    = ['Joshua Priddle']
-  s.email      = 'jpriddle@nevercraft.net'
+  s.email      = 'jpriddle@site5.com'
 
   s.files      = %w[ Rakefile README.markdown ]
   s.files     += Dir['lib/**/*']
