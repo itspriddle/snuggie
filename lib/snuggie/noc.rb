@@ -132,6 +132,7 @@ module Snuggie
         end
       end
 
+      params.merge!(@credentials) unless @credentials.nil? || @credentials.empty?
       uri = "#{API_URL}?#{query_string(params)}"
       if res = fetch(uri)
         @response = begin
