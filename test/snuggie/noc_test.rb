@@ -166,7 +166,6 @@ context "Snuggie::NOC" do
 
     res = @noc.refund :actid => 99999
     assert res.is_a?(Hash)
-    # added-1MerrorlicenseXXXXX-XXXXX-XXXXX-XXXXX-XXXXXtime1308066592bal-50.0actionrefundrate2.00actid0lidXXXXXamt-2.0
     assert_equal res['added'], '-1M'
     assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
     assert_equal res['time'], 1308066592
