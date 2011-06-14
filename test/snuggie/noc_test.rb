@@ -132,10 +132,30 @@ context "Snuggie::NOC" do
   end
 
   test "#buy_license required params" do
-    keys = [:purchase, :ips, :toadd, :servertype, :authemail, :autorenew]
+    params = {
+      :ip         => '127.0.0.1',
+      :toadd      => '1M',
+      :servertype => 1,
+      :authemail  => 'marty@hilldale.org',
+      :autorenew  => '1'
+    }
+    mock_request(:buy_license)
     assert_raise(Snuggie::Errors::MissingArgument, "requires args") do
       @noc.buy_license
     end
+
+    res = @noc.buy_license(params)
+    assert res.is_a?(Hash)
+    assert_equal res['added'].to_i, 1
+    assert_equal res['autorenew'], 'YES'
+    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert_equal res['time'].to_i, 1308062889
+    assert_equal res['bal'], -48.0
+    assert_equal res['rate'].to_i, 2
+    assert_equal res['actid'].to_i, 99999
+    assert_equal res['ip'], '127.0.0.1'
+    assert_equal res['lid'].to_i, 99999
+    assert_equal res['amt'].to_i, 2
   end
 
   # test "#refund" do

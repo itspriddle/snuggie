@@ -29,6 +29,7 @@ module Snuggie
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
       params.merge!(:ca => :buy, :purchase => 1)
+      params[:ips] = params.delete(:ip) if params[:ip]
       commit(params,
         :require  => [:purchase, :ips, :toadd, :servertype, :autorenew]
       )

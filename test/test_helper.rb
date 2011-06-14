@@ -28,12 +28,12 @@ def context(*args, &block)
   klass.class_eval &block
 end
 
-
-def mock_request(url, options = {})
-  if fixture = options.delete(:fixture)
-    options[:body] = File.read("test/fixtures/#{fixture}.txt")
+def mock_request(method, options = {})
+  fixture = File.expand_path("../fixtures/#{method}.txt", __FILE__)
+  if File.exists?(fixture)
+    options[:body] = File.read(fixture)
   end
-  FakeWeb.register_uri(:get, url, options)
+  FakeWeb.register_uri(:get, %r|^#{Snuggie::NOC::API_URL}\?.*|, options)
 end
 
 # Asserts that the given object has an instance variable for var
