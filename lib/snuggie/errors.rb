@@ -1,6 +1,6 @@
 module Snuggie
   module Errors
-    class MissingArgument < StandardError
+    class MissingArgument < ArgumentError
     end
   end
 end
