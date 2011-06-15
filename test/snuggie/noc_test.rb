@@ -136,7 +136,7 @@ context "Snuggie::NOC" do
       :ip         => '127.0.0.1',
       :toadd      => '1M',
       :servertype => 1,
-      :authemail  => 'marty@hilldale.org',
+      :authemail  => 'marty@hilldale.edu',
       :autorenew  => '1'
     }
     mock_request(:buy_license)
@@ -172,7 +172,7 @@ context "Snuggie::NOC" do
     assert_equal res['bal'], -50.0
     assert_equal res['action'], 'refund'
     assert_equal res['rate'], '2.00'
-    assert_equal res['actid'], 0
+    assert_equal res['actid'], 99999
     assert_equal res['lid'], 'XXXXX'
     assert_equal res['amt'], -2.0
   end
@@ -220,6 +220,7 @@ context "Snuggie::NOC" do
       @noc.license_logs
     end
     res = @noc.license_logs :key => 'XXXXX-XXXXX-XXXXX-XXXXX'
+
     assert res.is_a?(Hash)
     assert res['actions'].is_a?(Array)
     act = res['actions'].first
