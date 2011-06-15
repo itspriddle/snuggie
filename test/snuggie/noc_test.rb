@@ -187,11 +187,24 @@ context "Snuggie::NOC" do
   end
 
   test "#cancel_license" do
-    mock_request(:cancel)
+    mock_request(:cancel_license)
     assert_raise(Snuggie::Errors::MissingArgument, "requires lickey or licip") do
       @noc.cancel_license
     end
     # TODO: fixture/test
+    res = @noc.cancel_license :lickey => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert res.is_a?(Hash)
+    assert res['cancelled_license'].is_a?(Hash)
+    res = res['cancelled_license']
+    assert_equal res['apiuid'].to_i, 0
+    assert_equal res['nocid'], 'XXXX'
+    assert_equal res['servertype'].to_i, 1
+    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    assert_equal res['time'].to_i, 1308062889
+    assert_equal res['expires'].to_i, 20110614
+    assert_equal res['type'].to_i, 1
+    assert_equal res['last_sync'].to_i, 0
+    assert_equal res['authemail'], 'marty@hilldale.edu'
   end
 
   test "#invoice_details unbilled" do

@@ -70,11 +70,11 @@ Get unbilled transactions for the current month:
 
 Cancel a license by key
 
-    noc.cancel_license :key => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    noc.cancel_license :lickey => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
 
 Cancel a license by IP
 
-    noc.cancel_license :ip => '127.0.0.1'
+    noc.cancel_license :licip => '127.0.0.1'
 
 Get Action/Activity logs for a license
 
