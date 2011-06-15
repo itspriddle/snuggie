@@ -85,7 +85,7 @@ module Snuggie
     #   * lickey - (Optional) The license key
     #   * licip  - (Optional) The Primary IP of the license
     #
-    def cancel(params = {})
+    def cancel_license(params = {})
       params.merge!(:ca => :cancel, :cancel_license => 1)
       commit(params, :require_one => [:lickey, :licip])
     end
