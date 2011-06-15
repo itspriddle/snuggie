@@ -28,16 +28,20 @@ module Snuggie
 
     # Buy a license
     #
+    # NOTE: You must specify either months_to_add or years_to_add
+    #
     # Params
-    #   * ip         - The IP of the license to be Purchased or Renewed
-    #   * toadd      - Time to extend, eg: 1M, 8M, 1Y
-    #   * servertype - 1 for Dedicated and 2 for VPS
-    #   * authemail  - When buying a new license, this is required to
-    #                  verify the owner of the License. This address will
-    #                  be used to send reminders when the license is
-    #                  expiring. Not required for renewals
-    #   * autorenew  - Renew this license automatically before
-    #                  expiration. Set to 1 for true, 2 for false
+    #   * ip            - The IP of the license to be Purchased or Renewed
+    #   * months_to_add - Months to buy/renew the license for
+    #   * years_to_add  - Years to buy/renew the license for
+    #   * servertype    - Type of server used by this license, should be
+    #                     :dedicated or :vps
+    #   * authemail     - When buying a new license, this is required to
+    #                     verify the owner of the License. This address will
+    #                     be used to send reminders when the license is
+    #                     expiring. Not required for renewals
+    #   * autorenew     - Renew this license automatically before
+    #                     expiration. Set to true or false.
     def buy_license(params = {})
       if params[:months_to_add]
         params[:toadd] = "#{params.delete(:months_to_add)}M"
