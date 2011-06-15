@@ -31,14 +31,14 @@ Buy/renew a license
     noc.buy_license(
       :ip            => '127.0.0.1',
       :months_to_add => 1,
-      :servertype    => :dedicated,
-      :authemail     => 'marty@hilldale.edu',
-      :autorenew     => true
+      :server_type   => :dedicated,
+      :auth_email    => 'marty@hilldale.edu',
+      :auto_renew    => true
     )
 
 Refund a transaction
 
-    noc.refund :actid => 99999
+    noc.refund :action_id => 99999
 
 List all licenses
 
@@ -62,7 +62,7 @@ List licenses expiring in 15 days
 
 Get invoice details
 
-    noc.invoice_details :invoid => 99999
+    noc.invoice_details :invoice_id => 99999
 
 Get unbilled transactions for the current month:
 
