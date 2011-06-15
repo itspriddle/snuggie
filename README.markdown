@@ -2,6 +2,9 @@
 
 Snuggie wraps the Softaculous API in a warm, loving ruby embrace.
 
+Snuggie has been tested on on MRI 1.8.4, MRI 1.8.7, MRI 1.9.2,
+Rubinius 2.0.0pre, and JRuby 1.6.2.
+
 [Build Status]: http://travis-ci.org/site5/snuggie
 
 ## Installation
