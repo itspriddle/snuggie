@@ -97,8 +97,11 @@ module Snuggie
     #   * ips - The list of IPs of the same VPS/Server. The first IP is
     #           the Primary IP. You may add up to 8 IPs
     #
-    # def edit_ips(params = {})
-    # end
+    def edit_ips(params = {})
+      params.merge!(:ca => :showlicense, :editlicense => 1)
+      params[:'ips[]'] = params.delete(:ips)
+      commit(params, :require => [:lid, :'ips[]'])
+    end
 
     # Get details for an invoice
     #

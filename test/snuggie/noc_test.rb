@@ -249,4 +249,16 @@ context "Snuggie::NOC" do
     assert_equal lic['active'].to_i, 1
   end
 
+  test "#edit_ips" do
+    mock_request(:edit_ips)
+    assert_raise(Snuggie::Errors::MissingArgument, "requires ips and lid") do
+      @noc.edit_ips
+    end
+    res = @noc.edit_ips :ips => '127.0.0.2', :lid => 'XXXXX'
+
+   assert res.is_a?(Hash)
+   assert_equal res['lid'].to_i, 99999
+   assert res['new_ips'].is_a?(Array)
+   assert_equal res['new_ips'].first, '127.0.0.2'
+  end
 end
