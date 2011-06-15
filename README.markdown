@@ -28,11 +28,17 @@ Your Softaculous credentials can also be configured globally:
 
 Buy/renew a license
 
-    noc.buy_license(params = {})
+    noc.buy_license(
+      :ip         => '127.0.0.1',
+      :toadd      => '1M',
+      :servertype => 1,
+      :authemail  => 'marty@hilldale.edu',
+      :autorenew  => '1'
+    )
 
 Refund a transaction
 
-    noc.refund invoice_id
+    noc.refund :actid => 99999
 
 List all licenses
 
@@ -56,7 +62,7 @@ List licenses expiring in 15 days
 
 Get invoice details
 
-    noc.invoice_details :invoid => id
+    noc.invoice_details :invoid => 99999
 
 Get unbilled transactions for the current month:
 
@@ -64,15 +70,15 @@ Get unbilled transactions for the current month:
 
 Cancel a license by key
 
-    noc.cancel_license :key => 'KEY'
+    noc.cancel_license :key => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
 
 Cancel a license by IP
 
-    noc.cancel_license :ip => 'IP'
+    noc.cancel_license :ip => '127.0.0.1'
 
 Get Action/Activity logs for a license
 
-    noc.license_logs :key => 'KEY'
+    noc.license_logs :key => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
 
 ## Note on Patches/Pull Requests
 
