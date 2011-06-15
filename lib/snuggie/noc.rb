@@ -3,9 +3,20 @@ require 'net/http'
 require 'php_serialize'
 
 module Snuggie
+  # Snuggie::NOC is the main class for communicating with the
+  # Softaculous NOC API.
   class NOC
+
+    # The Softaculous NOC API lives here
     API_URL = 'http://www.softaculous.com/noc'
 
+    # Creates a new Snuggie::NOC instance
+    #
+    # Params
+    #   * credentials - (Optional) a hash with :username, :password to
+    #                   be used to authenticate with Softaculous. If not
+    #                   provided, the Snuggie will try using those
+    #                   configured via `Snuggie#configure`
     def initialize(credentials = {})
       credentials = {
         :username => Snuggie.config.username,
@@ -65,7 +76,6 @@ module Snuggie
     #   * len    - (Optional) The length to limit the result set to
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
-    #
     def list_licenses(params = {})
       params[:ca] = :licenses
       commit(params)
@@ -84,7 +94,6 @@ module Snuggie
     #
     #   * lickey - (Optional) The license key
     #   * licip  - (Optional) The Primary IP of the license
-    #
     def cancel_license(params = {})
       params.merge!(:ca => :cancel, :cancel_license => 1)
       commit(params, :require_one => [:lickey, :licip])
@@ -96,7 +105,6 @@ module Snuggie
     #   * lid - The license ID (**NOT** the license key)
     #   * ips - The list of IPs of the same VPS/Server. The first IP is
     #           the Primary IP. You may add up to 8 IPs
-    #
     def edit_ips(params = {})
       params.merge!(:ca => :showlicense, :editlicense => 1)
       params[:'ips[]'] = params.delete(:ips)
@@ -110,7 +118,6 @@ module Snuggie
     #
     # Params
     #   * invoid - The invoice ID to getch details for.
-    #
     def invoice_details(params = {})
       params[:ca] = :invoicedetails
       commit(params)
@@ -124,13 +131,18 @@ module Snuggie
     # Params
     #   * key   - The license key
     #   * limit - The number of action logs to return
-    #
     def license_logs(params = {})
       params[:ca] = :licenselogs
       commit(params, :require => :key)
     end
 
   private
+
+    # Send a request upstream to Softaculous
+    #
+    # Params
+    #   * params  - a hash of parameters for the request
+    #   * options - a hash of options, used to validate required params
     def commit(params, options = {})
       if options[:require]
         unless require_params(params, options[:require])
@@ -145,6 +157,7 @@ module Snuggie
       end
 
       params.merge!(@credentials) unless @credentials.nil? || @credentials.empty?
+
       uri = "#{API_URL}?#{query_string(params)}"
       if res = fetch(uri)
         @response = begin
@@ -155,16 +168,33 @@ module Snuggie
       end
     end
 
+    # Returns true if params has all of the specified keys
+    #
+    # Params
+    #   * params - hash of query parameters
+    #   * keys   - keys to search for in params
     def require_params(params, keys)
       Array(keys).each { |key| return false unless params[key] }
       true
     end
 
+    # Returns true if params has one of the specified keys
+    #
+    # Params
+    #   * params - hash of query parameters
+    #   * keys   - keys to search for in params
     def require_one_of(params, keys)
       Array(keys).each { |key| return true if params[key] }
       false
     end
 
+    # Formats params into a query string for a GET request
+    #
+    # NOTE: For convenience, this converts the keys :username and
+    #       :password to :nocname and :nocpass respectively.
+    #
+    # Params
+    #   * params - hash of query parameters
     def query_string(params)
       params.map do |key, val|
         case key.to_sym
@@ -181,6 +211,10 @@ module Snuggie
     #
     # See Following Redirection at
     # http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/classes/Net/HTTP.html
+    #
+    # Params
+    #   * uri_str - the URL to fetch as a string
+    #   * limit   - number of redirects to allow
     def fetch(uri_str, limit = 10)
       # You should choose better exception.
       raise ArgumentError, 'HTTP redirect too deep' if limit == 0

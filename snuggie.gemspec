@@ -7,7 +7,7 @@ Gem::Specification.new do |s|
   s.name       = 'snuggie'
   s.version    = Snuggie::Version
   s.date       = Time.now.strftime('%Y-%m-%d')
-  s.summary    = 'Snuggie wraps the Softaculous API in a warm, loving embrace'
+  s.summary    = 'Snuggie wraps the Softaculous API in a warm, loving ruby embrace'
   s.homepage   = 'https://github.com/site5/snuggie'
   s.authors    = ['Joshua Priddle']
   s.email      = 'jpriddle@site5.com'
@@ -24,6 +24,6 @@ Gem::Specification.new do |s|
   s.add_development_dependency 'fakeweb', '~> 1.3.0'
 
   s.description = <<-DESC
-    Snuggie wraps the Softaculous API in a warm, loving embrace.
+    Snuggie wraps the Softaculous API in a warm, loving ruby embrace.
   DESC
 end

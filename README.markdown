@@ -1,6 +1,6 @@
 # Snuggie [![Build Status](http://travis-ci.org/site5/snuggie.png)][Build Status]
 
-Snuggie wraps the Softaculous API in a warm, loving embrace.
+Snuggie wraps the Softaculous API in a warm, loving ruby embrace.
 
 [Build Status]: http://travis-ci.org/site5/snuggie
 
