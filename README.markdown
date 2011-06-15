@@ -17,6 +17,15 @@ Create a new `Snuggie::NOC` object with your credentials:
       :password => 'mcSUPERfly'
     )
 
+Your Softaculous credentials can also be configured globally:
+
+    Snuggie.configure do |config|
+      config.username = 'marty'
+      config.password = 'mcSUPERfly'
+    end
+
+    noc = Snuggie::NOC.new
+
 Buy/renew a license
 
     noc.buy_license(params = {})
@@ -47,7 +56,7 @@ List licenses expiring in 15 days
 
 Get invoice details
 
-    noc.invoice_details id
+    noc.invoice_details :invoid => id
 
 Get unbilled transactions for the current month:
 
