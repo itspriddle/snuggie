@@ -45,6 +45,11 @@ module Snuggie
     #   * auto_renew     - Renew this license automatically before
     #                      expiration. Set to true or false.
     def buy_license(params = {})
+      params[:ips]        = params.delete(:ip)          if params[:ip]
+      params[:autorenew]  = params.delete(:auto_renew)  if params[:auto_renew]
+      params[:authemail]  = params.delete(:auth_email)  if params[:auth_email]
+      params[:servertype] = params.delete(:server_type) if params[:server_type]
+
       if params[:months_to_add]
         params[:toadd] = "#{params.delete(:months_to_add)}M"
       elsif params[:years_to_add]
@@ -54,18 +59,12 @@ module Snuggie
       if [:dedicated, :vps].include?(params[:servertype])
         params[:servertype] = params[:servertype] == :dedicated ? 1 : 2
       end
+
       if params.has_key?(:autorenew)
         params[:autorenew] = params[:autorenew] === true ? 1 : 2
       end
 
-      params[:ips]        = params.delete(:ip)          if params[:ip]
-      params[:autorenew]  = params.delete(:auto_renew)  if params[:auto_renew]
-      params[:authemail]  = params.delete(:auth_email)  if params[:auth_email]
-      params[:servertype] = params.delete(:server_type) if params[:server_type]
-
-      params.merge!(:ca => :buy, :purchase => 1)
-
-      commit(params,
+      commit(params.merge!(:ca => :buy, :purchase => 1),
         :require  => [:purchase, :ips, :toadd, :servertype, :autorenew]
       )
     end
@@ -125,8 +124,9 @@ module Snuggie
     def cancel_license(params = {})
       params[:lickey] = params.delete(:key) if params[:key]
       params[:licip]  = params.delete(:ip)  if params[:ip]
-      params.merge!(:ca => :cancel, :cancel_license => 1)
-      commit(params, :require_one => [:lickey, :licip])
+      commit(params.merge!(:ca => :cancel, :cancel_license => 1),
+        :require_one => [:lickey, :licip]
+      )
     end
 
     # Edit IPs associated with a license
@@ -139,8 +139,9 @@ module Snuggie
     def edit_ips(params = {})
       params[:'ips[]'] = params.delete(:ips)
       params[:lid]     = params.delete(:license_id) if params[:license_id]
-      params.merge!(:ca => :showlicense, :editlicense => 1)
-      commit(params, :require => [:lid, :'ips[]'])
+      commit(params.merge!(:ca => :showlicense, :editlicense => 1),
+        :require => [:lid, :'ips[]']
+      )
     end
 
     # Get details for an invoice
