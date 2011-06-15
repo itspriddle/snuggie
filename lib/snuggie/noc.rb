@@ -39,8 +39,25 @@ module Snuggie
     #   * autorenew  - Renew this license automatically before
     #                  expiration. Set to 1 for true, 2 for false
     def buy_license(params = {})
+      if params[:months_to_add]
+        params[:toadd] = "#{params.delete(:months_to_add)}M"
+      elsif params[:years_to_add]
+        params[:toadd] = "#{params.delete(:years_to_add)}Y"
+      end
+
+      if [:dedicated, :vps].include?(params[:servertype])
+        params[:servertype] = params[:servertype] == :dedicated ? 1 : 2
+      end
+      if params.has_key?(:autorenew)
+        params[:autorenew] = params[:autorenew] === true ? 1 : 2
+      end
+
+      if params[:ip]
+        params[:ips] = params.delete(:ip)
+      end
+
       params.merge!(:ca => :buy, :purchase => 1)
-      params[:ips] = params.delete(:ip) if params[:ip]
+
       commit(params,
         :require  => [:purchase, :ips, :toadd, :servertype, :autorenew]
       )
@@ -92,9 +109,11 @@ module Snuggie
     #
     # Params
     #
-    #   * lickey - (Optional) The license key
-    #   * licip  - (Optional) The Primary IP of the license
+    #   * key - (Optional) The license key
+    #   * ip  - (Optional) The Primary IP of the license
     def cancel_license(params = {})
+      params[:lickey] = params.delete(:key) if params[:key]
+      params[:licip]  = params.delete(:ip)  if params[:ip]
       params.merge!(:ca => :cancel, :cancel_license => 1)
       commit(params, :require_one => [:lickey, :licip])
     end

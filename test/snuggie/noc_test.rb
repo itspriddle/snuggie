@@ -133,11 +133,11 @@ context "Snuggie::NOC" do
 
   test "#buy_license required params" do
     params = {
-      :ip         => '127.0.0.1',
-      :toadd      => '1M',
-      :servertype => 1,
-      :authemail  => 'marty@hilldale.edu',
-      :autorenew  => '1'
+      :ip            => '127.0.0.1',
+      :months_to_add => 1,
+      :servertype    => :dedicated,
+      :authemail     => 'marty@hilldale.edu',
+      :autorenew     => true
     }
     mock_request(:buy_license)
     assert_raise(Snuggie::Errors::MissingArgument, "requires args") do
@@ -192,7 +192,7 @@ context "Snuggie::NOC" do
       @noc.cancel_license
     end
     # TODO: fixture/test
-    res = @noc.cancel_license :lickey => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
+    res = @noc.cancel_license :key => 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
     assert res.is_a?(Hash)
     assert res['cancelled_license'].is_a?(Hash)
     res = res['cancelled_license']
