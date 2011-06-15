@@ -19,8 +19,8 @@ context "Snuggie::NOC" do
     credentials = @noc.instance_variable_get(:@credentials)
     assert credentials.is_a?(Hash)
     TEST_CREDENTIALS.each do |key, val|
-      assert_not_nil credentials[key]
-      assert_equal credentials[key], val
+      assert credentials.has_key?(key)
+      assert_equal val, credentials[key]
     end
   end
 
@@ -33,14 +33,14 @@ context "Snuggie::NOC" do
     assert credentials.is_a?(Hash)
     ({ :username => 'doc', :password => 'clara' }).each do |key, val|
       assert_not_nil credentials[key]
-      assert_equal credentials[key], val
+      assert credentials.has_key?(key)
     end
 
     Snuggie.configure do |c|
       c.username = nil
       c.password = nil
     end
-    assert_equal Hash.new, @noc.class.new.instance_variable_get(:@credentials)
+    assert_equal @noc.class.new.instance_variable_get(:@credentials), Hash.new
   end
 
   test "#require_params returns true if all params are set" do
@@ -69,12 +69,13 @@ context "Snuggie::NOC" do
       query_string(params)
     end
 
-    assert query.match(/date=1955/)
-    assert query.match(/fuel=plutonium/)
-    assert query.match(/nocname=marty/)
-    assert query.match(/nocpass=mcSUPERfly/)
-    assert_nil query.match(/username/)
-    assert_nil query.match(/password/)
+    assert_match /date=1955/,          query
+    assert_match /fuel=plutonium/,     query
+    assert_match /nocname=marty/,      query
+    assert_match /nocpass=mcSUPERfly/, query
+
+    assert_no_match /username/, query
+    assert_no_match /password/, query
   end
 
   test "#commit requires all :require params" do
@@ -119,7 +120,7 @@ context "Snuggie::NOC" do
       commit(p1, :require => :date)
     end
     assert res.has_key?('status')
-    assert res['status'] == 'success'
+    assert_equal 'success', res['status']
   end
 
   test "#commit returns HTTP body if PHP.unserialize fails" do
@@ -128,7 +129,7 @@ context "Snuggie::NOC" do
     res = @noc.instance_eval do
       commit(p1, :require => :date)
     end
-    assert_equal res, 'not a PHP serialized string'
+    assert_equal 'not a PHP serialized string', res
   end
 
   test "#buy_license required params" do
@@ -146,16 +147,16 @@ context "Snuggie::NOC" do
 
     res = @noc.buy_license(params)
     assert res.is_a?(Hash)
-    assert_equal res['added'].to_i, 1
-    assert_equal res['autorenew'], 'YES'
-    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
-    assert_equal res['time'].to_i, 1308062889
-    assert_equal res['bal'], -48.0
-    assert_equal res['rate'].to_i, 2
-    assert_equal res['actid'].to_i, 99999
-    assert_equal res['ip'], '127.0.0.1'
-    assert_equal res['lid'].to_i, 99999
-    assert_equal res['amt'].to_i, 2
+    assert_equal '1M', res['added']
+    assert_equal 'YES', res['autorenew']
+    assert_equal 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', res['license']
+    assert_equal 1308062889, res['time']
+    assert_equal -48.0, res['bal']
+    assert_equal 2, res['rate']
+    assert_equal 99999, res['actid']
+    assert_equal '127.0.0.1', res['ip']
+    assert_equal 99999, res['lid']
+    assert_equal 2, res['amt']
   end
 
   test "#refund" do
@@ -166,23 +167,23 @@ context "Snuggie::NOC" do
 
     res = @noc.refund :actid => 99999
     assert res.is_a?(Hash)
-    assert_equal res['added'], '-1M'
-    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
-    assert_equal res['time'], 1308066592
-    assert_equal res['bal'], -50.0
-    assert_equal res['action'], 'refund'
-    assert_equal res['rate'], '2.00'
-    assert_equal res['actid'], 99999
-    assert_equal res['lid'], 'XXXXX'
-    assert_equal res['amt'], -2.0
+    assert_equal '-1M', res['added']
+    assert_equal 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', res['license']
+    assert_equal 1308066592, res['time']
+    assert_equal -50.0, res['bal']
+    assert_equal 'refund', res['action']
+    assert_equal '2.00', res['rate']
+    assert_equal 99999, res['actid']
+    assert_equal 'XXXXX', res['lid']
+    assert_equal -2.0, res['amt']
   end
 
   test "#list_licenses" do
     mock_request(:list_licenses)
     res = @noc.list_licenses
     assert res.is_a?(Hash)
-    assert_equal res['num_results'], 1
-    assert_equal res['num_active'], 1
+    assert_equal 1, res['num_results']
+    assert_equal 1, res['num_active']
     assert_not_nil res['licenses']
   end
 
@@ -196,15 +197,15 @@ context "Snuggie::NOC" do
     assert res.is_a?(Hash)
     assert res['cancelled_license'].is_a?(Hash)
     res = res['cancelled_license']
-    assert_equal res['apiuid'].to_i, 0
-    assert_equal res['nocid'], 'XXXX'
-    assert_equal res['servertype'].to_i, 1
-    assert_equal res['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
-    assert_equal res['time'].to_i, 1308062889
-    assert_equal res['expires'].to_i, 20110614
-    assert_equal res['type'].to_i, 1
-    assert_equal res['last_sync'].to_i, 0
-    assert_equal res['authemail'], 'marty@hilldale.edu'
+    assert_equal '0', res['apiuid']
+    assert_equal 'XXXX', res['nocid']
+    assert_equal '1', res['servertype']
+    assert_equal 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', res['license']
+    assert_equal '1308062889', res['time']
+    assert_equal '20110614', res['expires']
+    assert_equal '1', res['type']
+    assert_equal '0', res['last_sync']
+    assert_equal 'marty@hilldale.edu', res['authemail']
   end
 
   test "#invoice_details unbilled" do
@@ -213,18 +214,18 @@ context "Snuggie::NOC" do
     assert res.is_a?(Hash)
     assert res['actions'].is_a?(Hash)
     act = res['actions'][0]
-    assert_equal act['added'], '1M'
-    assert_equal act['nocid'], 'XXXX'
-    assert_equal act['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
-    assert_equal act['refunded'].to_i, 0
-    assert_equal act['time'], '1308062889'
-    assert_equal act['date'], '20110614'
-    assert_equal act['rate'], '2.00'
-    assert_equal act['action'], 'new'
-    assert_equal act['actid'], 'XXXXX'
-    assert_equal act['invoid'].to_i, 0
-    assert_equal act['lid'], 'XXXXX'
-    assert_equal act['amt'], '2.00'
+    assert_equal '1M', act['added']
+    assert_equal 'XXXX', act['nocid']
+    assert_equal 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', act['license']
+    assert_equal '0', act['refunded']
+    assert_equal '1308062889', act['time']
+    assert_equal '20110614', act['date']
+    assert_equal '2.00', act['rate']
+    assert_equal 'new', act['action']
+    assert_equal 'XXXXX', act['actid']
+    assert_equal '0', act['invoid']
+    assert_equal 'XXXXX', act['lid']
+    assert_equal '2.00', act['amt']
   end
 
   test "#license_logs" do
@@ -238,29 +239,29 @@ context "Snuggie::NOC" do
     assert res['actions'].is_a?(Array)
     act = res['actions'].first
     assert act.is_a?(Hash)
-    assert_equal act['added'], '1M'
-    assert_equal act['nocid'], 'XXXX'
-    assert_equal act['refunded'].to_i, 0
-    assert_equal act['time'].to_i, 1308062889
-    assert_equal act['date'].to_i, 20110614
-    assert_equal act['rate'], '2.00'
-    assert_equal act['action'], 'new'
-    assert_equal act['invoid'].to_i, 0
-    assert_equal act['lid'], 'XXXXX'
-    assert_equal act['amt'], '2.00'
+    assert_equal '1M', act['added']
+    assert_equal 'XXXX', act['nocid']
+    assert_equal '0', act['refunded']
+    assert_equal '1308062889', act['time']
+    assert_equal '20110614', act['date']
+    assert_equal '2.00', act['rate']
+    assert_equal 'new', act['action']
+    assert_equal '0', act['invoid']
+    assert_equal 'XXXXX', act['lid']
+    assert_equal '2.00', act['amt']
     lic = res['license']
     assert lic.is_a?(Hash)
-    assert_equal lic['servertype'].to_i, 1
-    assert_equal lic['nocid'], 'XXXX'
-    assert_equal lic['apiuid'].to_i, 0
-    assert_equal lic['license'], 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX'
-    assert_equal lic['expires'].to_i, 20110714
-    assert_equal lic['time'].to_i, 1308062889
-    assert_equal lic['last_sync'].to_i, 0
-    assert_equal lic['type'].to_i, 1
-    assert_equal lic['lid'], 'XXXXX'
-    assert_equal lic['authemail'], 'marty@hilldale.edu'
-    assert_equal lic['active'].to_i, 1
+    assert_equal '1', lic['servertype']
+    assert_equal 'XXXX', lic['nocid']
+    assert_equal '0', lic['apiuid']
+    assert_equal 'XXXXX-XXXXX-XXXXX-XXXXX-XXXXX', lic['license']
+    assert_equal '20110714', lic['expires']
+    assert_equal '1308062889', lic['time']
+    assert_equal '0', lic['last_sync']
+    assert_equal '1', lic['type']
+    assert_equal 'XXXXX', lic['lid']
+    assert_equal 'marty@hilldale.edu', lic['authemail']
+    assert_equal '1', lic['active']
   end
 
   test "#edit_ips" do
@@ -271,8 +272,8 @@ context "Snuggie::NOC" do
     res = @noc.edit_ips :ips => '127.0.0.2', :lid => 'XXXXX'
 
    assert res.is_a?(Hash)
-   assert_equal res['lid'].to_i, 99999
+   assert_equal 99999, res['lid']
    assert res['new_ips'].is_a?(Array)
-   assert_equal res['new_ips'].first, '127.0.0.2'
+   assert_equal '127.0.0.2', res['new_ips'].first
   end
 end
