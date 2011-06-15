@@ -13,6 +13,7 @@ module Snuggie
     # Creates a new Snuggie::NOC instance
     #
     # Params
+    #
     #   * credentials - (Optional) a hash with :username, :password to
     #                   be used to authenticate with Softaculous. If not
     #                   provided, the Snuggie will try using those
@@ -31,17 +32,18 @@ module Snuggie
     # NOTE: You must specify either months_to_add or years_to_add
     #
     # Params
-    #   * ip            - The IP of the license to be Purchased or Renewed
-    #   * months_to_add - Months to buy/renew the license for
-    #   * years_to_add  - Years to buy/renew the license for
-    #   * servertype    - Type of server used by this license, should be
-    #                     :dedicated or :vps
-    #   * authemail     - When buying a new license, this is required to
-    #                     verify the owner of the License. This address will
-    #                     be used to send reminders when the license is
-    #                     expiring. Not required for renewals
-    #   * autorenew     - Renew this license automatically before
-    #                     expiration. Set to true or false.
+    #
+    #   * ip             - The IP of the license to be Purchased or Renewed
+    #   * months_to_add  - Months to buy/renew the license for
+    #   * years_to_add   - Years to buy/renew the license for
+    #   * server_type    - Type of server used by this license, should be
+    #                      :dedicated or :vps
+    #   * auth_email     - When buying a new license, this is required to
+    #                      verify the owner of the License. This address will
+    #                      be used to send reminders when the license is
+    #                      expiring. Not required for renewals
+    #   * auto_renew     - Renew this license automatically before
+    #                      expiration. Set to true or false.
     def buy_license(params = {})
       if params[:months_to_add]
         params[:toadd] = "#{params.delete(:months_to_add)}M"
@@ -56,9 +58,10 @@ module Snuggie
         params[:autorenew] = params[:autorenew] === true ? 1 : 2
       end
 
-      if params[:ip]
-        params[:ips] = params.delete(:ip)
-      end
+      params[:ips]        = params.delete(:ip)          if params[:ip]
+      params[:autorenew]  = params.delete(:auto_renew)  if params[:auto_renew]
+      params[:authemail]  = params.delete(:auth_email)  if params[:auth_email]
+      params[:servertype] = params.delete(:server_type) if params[:server_type]
 
       params.merge!(:ca => :buy, :purchase => 1)
 
@@ -73,9 +76,11 @@ module Snuggie
     # a license.
     #
     # Params
-    #   * actid - The Action ID to clain a refund for
+    #
+    #   * action_id - The Action ID to clain a refund for
     def refund(params = {})
-      params[:ca] = :refund
+      params[:actid] = params.delete(:action_id) if params[:action_id]
+      params[:ca]    = :refund
       commit(params, :require => [:actid])
     end
 
@@ -85,6 +90,7 @@ module Snuggie
     # list of all of your licenses will be returned.
     #
     # Params
+    #
     #   * key    - (Optional) Search for a specific License by License Key
     #   * ip     - (Optional) Search for a specific License by Primary IP
     #   * expiry - (Optional) Fetch a list of Licenses that are expiring
@@ -94,11 +100,12 @@ module Snuggie
     #   * start  - (Optional) The starting point to return from
     #              Eg: specify 99 if you have 500 licenses and want to
     #              return licenses 100-500.
-    #   * len    - (Optional) The length to limit the result set to
+    #   * limit  - (Optional) The length to limit the result set to
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
     def list_licenses(params = {})
-      params[:ca] = :licenses
+      params[:len] = params.delete(:limit) if params[:limit]
+      params[:ca]  = :licenses
       commit(params)
     end
 
@@ -125,12 +132,14 @@ module Snuggie
     # Edit IPs associated with a license
     #
     # Params
-    #   * lid - The license ID (**NOT** the license key)
-    #   * ips - The list of IPs of the same VPS/Server. The first IP is
-    #           the Primary IP. You may add up to 8 IPs
+    #
+    #   * license_id - The license ID (**NOT** the license key)
+    #   * ips        - The list of IPs of the same VPS/Server. The first IP is
+    #                  the Primary IP. You may add up to 8 IPs
     def edit_ips(params = {})
-      params.merge!(:ca => :showlicense, :editlicense => 1)
       params[:'ips[]'] = params.delete(:ips)
+      params[:lid]     = params.delete(:license_id) if params[:license_id]
+      params.merge!(:ca => :showlicense, :editlicense => 1)
       commit(params, :require => [:lid, :'ips[]'])
     end
 
@@ -140,9 +149,11 @@ module Snuggie
     # transactions for the current month will be returned
     #
     # Params
-    #   * invoid - The invoice ID to getch details for.
+    #
+    #   * invoice_id - The invoice ID to getch details for.
     def invoice_details(params = {})
-      params[:ca] = :invoicedetails
+      params[:invoid] = params.delete(:invoice_id) if params[:invoice_id]
+      params[:ca]     = :invoicedetails
       commit(params)
     end
 
@@ -152,6 +163,7 @@ module Snuggie
     # latest logs will appear first.
     #
     # Params
+    #
     #   * key   - The license key
     #   * limit - The number of action logs to return
     def license_logs(params = {})
@@ -164,6 +176,7 @@ module Snuggie
     # Send a request upstream to Softaculous
     #
     # Params
+    #
     #   * params  - a hash of parameters for the request
     #   * options - a hash of options, used to validate required params
     def commit(params, options = {})
@@ -194,6 +207,7 @@ module Snuggie
     # Returns true if params has all of the specified keys
     #
     # Params
+    #
     #   * params - hash of query parameters
     #   * keys   - keys to search for in params
     def require_params(params, keys)
@@ -204,6 +218,7 @@ module Snuggie
     # Returns true if params has one of the specified keys
     #
     # Params
+    #
     #   * params - hash of query parameters
     #   * keys   - keys to search for in params
     def require_one_of(params, keys)
@@ -217,6 +232,7 @@ module Snuggie
     #       :password to :nocname and :nocpass respectively.
     #
     # Params
+    #
     #   * params - hash of query parameters
     def query_string(params)
       params.map do |key, val|
@@ -236,6 +252,7 @@ module Snuggie
     # http://ruby-doc.org/stdlib/libdoc/net/http/rdoc/classes/Net/HTTP.html
     #
     # Params
+    #
     #   * uri_str - the URL to fetch as a string
     #   * limit   - number of redirects to allow
     def fetch(uri_str, limit = 10)
