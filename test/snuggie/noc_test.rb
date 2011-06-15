@@ -118,7 +118,7 @@ context "Snuggie::NOC" do
     res = @noc.instance_eval do
       commit(p1, :require => :date)
     end
-    assert res.has_key? 'status'
+    assert res.has_key?('status')
     assert res['status'] == 'success'
   end
 
