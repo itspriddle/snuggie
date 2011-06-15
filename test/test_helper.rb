@@ -7,6 +7,7 @@ require 'php_serialize'
 begin
   require 'turn'
 rescue LoadError
+  puts "'gem install turn' for prettier test output"
 end
 
 FakeWeb.allow_net_connect = false
