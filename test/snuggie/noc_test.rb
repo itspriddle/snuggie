@@ -271,9 +271,9 @@ context "Snuggie::NOC" do
     end
     res = @noc.edit_ips :ips => '127.0.0.2', :lid => 'XXXXX'
 
-   assert res.is_a?(Hash)
-   assert_equal 99999, res['lid']
-   assert res['new_ips'].is_a?(Array)
-   assert_equal '127.0.0.2', res['new_ips'].first
+    assert res.is_a?(Hash)
+    assert_equal 99999, res['lid']
+    assert res['new_ips'].is_a?(Array)
+    assert_equal '127.0.0.2', res['new_ips'].first
   end
 end
