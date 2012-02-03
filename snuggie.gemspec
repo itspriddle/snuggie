@@ -20,7 +20,7 @@ Gem::Specification.new do |s|
   s.rdoc_options     = ["--charset=UTF-8"]
 
   s.add_dependency 'php-serialize', '~> 1.1.0'
-  s.add_development_dependency 'rake', '~> 0.8.7'
+  s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'fakeweb', '~> 1.3.0'
 
   s.description = <<-DESC
