@@ -3,7 +3,7 @@ script: "bundle exec rake test"
 notifications:
   email:
     recipients:
-      - engineering@site5.com
+      - engineering@internal.site5.com
     on_success: always
     on_failure: always
 rvm:
