@@ -259,6 +259,7 @@ module Snuggie
       # You should choose better exception.
       raise ArgumentError, 'HTTP redirect too deep' if limit == 0
       Faraday.new(:url => uri_str) do |c|
+        c.response :raise_error
         c.response :follow_redirects, :limit => limit
         c.adapter :net_http
       end.get
