@@ -20,6 +20,8 @@ Gem::Specification.new do |s|
   s.rdoc_options     = ["--charset=UTF-8"]
 
   s.add_dependency 'php-serialize', '~> 1.1.0'
+  s.add_dependency 'faraday', '~> 0.8.0rc2'
+  s.add_dependency 'faraday_middleware', '~> 0.8.4'
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'fakeweb', '~> 1.3.0'
 
