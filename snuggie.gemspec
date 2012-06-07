@@ -19,9 +19,11 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.markdown']
   s.rdoc_options     = ["--charset=UTF-8"]
 
-  s.add_dependency 'php-serialize', '~> 1.1.0'
-  s.add_dependency 'faraday', '~> 0.8.0rc2'
-  s.add_dependency 'faraday_middleware', '~> 0.8.4'
+  s.add_runtime_dependency 'php-serialize', '~> 1.1.0'
+  s.add_runtime_dependency 'faraday', '~> 0.8.1'
+  s.add_runtime_dependency 'faraday_middleware', '~> 0.8.4'
+  s.add_runtime_dependency('jruby-openssl', '~> 0.7.4') if RUBY_PLATFORM == 'java'
+
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'fakeweb', '~> 1.3.0'
 
@@ -29,3 +31,4 @@ Gem::Specification.new do |s|
     Snuggie wraps the Softaculous API in a warm, loving ruby embrace.
   DESC
 end
+
