@@ -104,9 +104,10 @@ module Snuggie
     #              Eg: specify 100 if you have 500 licenses and want to
     #              limit the result set to 100 items
     def list_licenses(params = {})
-      params[:ips] = params.delete(:ip)    if params[:ip]
-      params[:len] = params.delete(:limit) if params[:limit]
-      params[:ca]  = :licenses
+      params[:lickey] = params.delete(:key)   if params[:key]
+      params[:ips]    = params.delete(:ip)    if params[:ip]
+      params[:len]    = params.delete(:limit) if params[:limit]
+      params[:ca]     = :licenses
       commit(params)
     end
 
