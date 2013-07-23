@@ -11,6 +11,7 @@ Gem::Specification.new do |s|
   s.homepage   = 'https://github.com/site5/snuggie'
   s.authors    = ['Joshua Priddle']
   s.email      = 'jpriddle@site5.com'
+  s.license    = 'MIT'
 
   s.files      = %w[ Rakefile README.markdown ]
   s.files     += Dir['lib/**/*']
