@@ -1,3 +1,3 @@
 module Snuggie
-  VERSION = Version = '0.2.1'
+  VERSION = Version = '0.2.2'
 end
