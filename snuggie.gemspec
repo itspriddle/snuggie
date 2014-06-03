@@ -20,10 +20,10 @@ Gem::Specification.new do |s|
   s.extra_rdoc_files = ['README.markdown']
   s.rdoc_options     = ["--charset=UTF-8"]
 
-  s.add_runtime_dependency 'php-serialize',      '~> 1.1.0'
-  s.add_runtime_dependency 'faraday',            '~> 0.8.9'
+  s.add_runtime_dependency 'php-serialize',      '>= 1.1.0'
+  s.add_runtime_dependency 'faraday',            '~> 0.9.0'
   s.add_runtime_dependency 'faraday_middleware', '~> 0.9.0'
-  s.add_runtime_dependency('jruby-openssl', '~> 0.7.4') if RUBY_PLATFORM == 'java'
+  s.add_runtime_dependency('jruby-openssl', '>= 0.7.4') if RUBY_PLATFORM == 'java'
 
   s.add_development_dependency 'rake', '~> 0.9.2.2'
   s.add_development_dependency 'fakeweb', '~> 1.3.0'
