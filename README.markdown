@@ -2,8 +2,7 @@
 
 Snuggie wraps the Softaculous API in a warm, loving ruby embrace.
 
-Snuggie has been tested on MRI 1.8.4, MRI 1.8.7, MRI 1.9.2,
-MRI 1.9.3 Preview 1, Rubinius 2.0.0pre, and JRuby 1.6.2.
+Snuggie has been tested on MRI 1.9.3, MRI 2.0.0, MRI 2.1.2, 1.9-compatible JRuby.
 
 [Build Status]: http://travis-ci.org/site5/snuggie
 [Build Icon]: https://secure.travis-ci.org/site5/snuggie.png?branch=master
@@ -96,4 +95,4 @@ Get Action/Activity logs for a license
 
 ## Copyright
 
-Copyright (c) 2012 Site5.com. See LICENSE for details.
+Copyright (c) 2012-2014 Site5.com. See LICENSE for details.
